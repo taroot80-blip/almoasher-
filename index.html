@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="المؤشر الإعلامي: منصة فؤاد المشيخص">
+<style>body{margin:0}</style>
+<title>المؤشر الإعلامي</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;700&family=Tajawal:wght@400;500;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: ثابت خلفي باهت (شعار المؤشر/صورة القسم) والمحتوى الزجاجي ينزلق فوقه؛ أبواب ثلاثية الأبعاد تقود للأقسام */
+:root{
+  --ink:#0b0805; --umber:#1a120b; --bark:#2a1d12;
+  --gold:#F2B632; --gold-2:#d9a441; --gold-dim:rgba(242,182,50,.28);
+  --parch:#f4e7cb; --muted:#bfae8e; --faint:#8a7a60;
+  --teal:#14B8A6; --teal-deep:#0f5c55; --sky:#38BDF8; --rose:#EF4444;
+  --glass:rgba(22,15,9,.62); --glass-2:rgba(32,22,13,.78); --line:rgba(242,182,50,.22);
+  --f-display:"El Messiri","Reem Kufi","Amiri",serif;
+  --f-body:"Tajawal","Cairo","Segoe UI",Tahoma,sans-serif;
+  --f-prose:"Amiri","Traditional Arabic",serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{direction:rtl}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--parch);font-family:var(--f-body);font-size:16px;line-height:1.75;overflow-x:hidden}
+a{color:var(--gold)}
+::selection{background:var(--gold);color:var(--umber)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+
+/* ===== الخلفية الثابتة ===== */
+.backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:radial-gradient(120% 80% at 70% 0%,#3a2814 0%,var(--bark) 30%,var(--umber) 60%,var(--ink) 100%)}
+.backdrop .layer{position:absolute;inset:-4%;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease;filter:saturate(.7) blur(2px)}
+.backdrop .layer.on{opacity:.16}
+.backdrop .layer[data-bg="emblem"].on{opacity:1;filter:none}
+.backdrop .pattern{position:absolute;inset:0;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23F2B632' stroke-width='1'%3E%3Cpath d='M60 18l12 30 30 12-30 12-12 30-12-30-30-12 30-12z'/%3E%3Crect x='38' y='38' width='44' height='44' transform='rotate(45 60 60)'/%3E%3Crect x='38' y='38' width='44' height='44'/%3E%3Ccircle cx='60' cy='60' r='9'/%3E%3C/g%3E%3C/svg%3E")}
+.backdrop .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,8,5,.35),rgba(11,8,5,.55) 60%,rgba(11,8,5,.8))}
+.backdrop canvas{position:absolute;inset:0;width:100%;height:100%}
+.emblem{position:absolute;left:50%;top:52%;width:min(120vmin,1100px);transform:translate(-50%,-50%);opacity:.075}
+.emblem .needle{transform-origin:300px 330px;animation:sway 9s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-38deg)}50%{transform:rotate(34deg)}}
+
+/* ===== الافتتاحية ===== */
+.intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,#2a1d12,#0b0805 70%);transition:opacity .8s ease,visibility .8s}
+.intro.gone{opacity:0;visibility:hidden}
+.intro-box{text-align:center;display:grid;gap:10px;justify-items:center;padding-inline:16px}
+.intro svg{width:min(70vw,320px);filter:drop-shadow(0 0 30px rgba(242,182,50,.35))}
+.intro .arc{stroke-dasharray:520;stroke-dashoffset:520;animation:draw 1.4s .1s cubic-bezier(.6,.1,.2,1) forwards}
+.intro .ndl{transform-origin:150px 160px;transform:rotate(-90deg);animation:swing 1.6s .4s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes swing{to{transform:rotate(24deg)}}
+.intro h1{font-family:var(--f-display);font-size:clamp(40px,9vw,76px);margin:0;line-height:1.1;background:linear-gradient(180deg,#ffe7a8,var(--gold) 55%,#a8741c);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;animation:rise .9s .9s forwards}
+.intro p{margin:0;color:var(--muted);opacity:0;animation:rise .9s 1.2s forwards}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.intro .skip{margin-top:8px;opacity:0;animation:rise .6s 1.4s forwards}
+
+/* ===== الرأس ===== */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:rgba(11,8,5,.9)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(11,8,5,.72);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border-bottom:1px solid var(--line)}
+.top-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:14px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--parch);flex:none}
+.brand svg{width:38px;height:38px}
+.brand b{font-family:var(--f-display);font-size:22px;color:var(--gold);line-height:1}
+.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.02em}
+nav.main{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+nav.main::-webkit-scrollbar{display:none}
+nav.main a{white-space:nowrap;text-decoration:none;color:var(--muted);padding:8px 12px;border-radius:999px;font-weight:500;font-size:15px;transition:.25s}
+nav.main a:hover,nav.main a.cur{color:var(--umber);background:var(--gold)}
+.sound{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:rgba(242,182,50,.08);color:var(--gold);border-radius:999px;height:40px;padding:0 12px;cursor:pointer;font:500 14px var(--f-body)}
+.sound svg{width:18px;height:18px}
+.sound[aria-pressed="false"] .on-i{display:none}
+.sound[aria-pressed="true"] .off-i{display:none}
+
+/* ===== عام ===== */
+main{position:relative;z-index:1}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+section.sec{padding-block:clamp(56px,9vw,110px)}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;color:var(--gold);font-weight:700;font-size:14px;letter-spacing:.04em}
+.eyebrow .let{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--gold);font-family:var(--f-display);font-size:18px;background:rgba(242,182,50,.1)}
+h2.h{font-family:var(--f-display);font-size:clamp(30px,5vw,52px);line-height:1.2;margin:.3em 0 .25em;text-wrap:balance;color:#fff4dc;text-shadow:0 2px 24px rgba(0,0,0,.5)}
+.lead{color:var(--muted);max-width:62ch;font-size:17px;margin:0}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 30px 60px -30px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,230,170,.08)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:14px;border:0;cursor:pointer;text-decoration:none;font:700 16px var(--f-body);transition:transform .2s,box-shadow .2s,background .2s}
+.btn.pri{background:linear-gradient(180deg,#ffcf5c,var(--gold) 50%,#d99a1e);color:var(--umber);box-shadow:0 10px 30px -10px rgba(242,182,50,.7),inset 0 -2px 0 rgba(0,0,0,.18)}
+.btn.pri:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px rgba(242,182,50,.9)}
+.btn.ghost{background:rgba(242,182,50,.08);color:var(--gold);border:1px solid var(--gold-dim)}
+.btn.ghost:hover{background:rgba(242,182,50,.18)}
+.btn svg{width:20px;height:20px}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:999px;background:rgba(242,182,50,.12);color:var(--gold);border:1px solid var(--gold-dim)}
+.tag.sample{background:rgba(56,189,248,.1);color:var(--sky);border-color:rgba(56,189,248,.35)}
+.reveal{transition:transform .9s cubic-bezier(.2,.7,.2,1),opacity .9s}
+.js .reveal.pre{transform:translateY(28px);opacity:.25}
+
+/* ===== البطل ===== */
+.hero{padding-block:clamp(36px,6vw,80px) clamp(30px,5vw,60px)}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,56px);align-items:center}
+.founder{display:flex;gap:clamp(16px,3vw,30px);align-items:center}
+.portrait{position:relative;flex:none;width:clamp(150px,19vw,230px);aspect-ratio:3/4;border-radius:999px 999px 26px 26px;max-width:100%}
+.portrait::before{content:"";position:absolute;inset:-5px;border-radius:inherit;background:conic-gradient(from 0deg,var(--gold),transparent 30%,#ffe39a 50%,transparent 70%,var(--gold));animation:spin 8s linear infinite}
+.portrait::after{content:"";position:absolute;inset:-16px;border-radius:999px 999px 34px 34px;border:1px dashed var(--gold-dim)}
+@keyframes spin{to{filter:hue-rotate(0deg)}}
+.portrait .ph{position:absolute;inset:0;border-radius:inherit;overflow:hidden;background:var(--umber);box-shadow:0 30px 60px -20px rgba(0,0,0,.8)}
+.portrait .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;display:block;transform:scale(1.02);transition:transform 1.2s ease}
+.portrait:hover .ph img{transform:scale(1.08)}
+.portrait .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(11,8,5,.45));pointer-events:none}
+.founder h1{font-family:var(--f-display);font-size:clamp(34px,5.5vw,64px);line-height:1.1;margin:0 0 6px;background:linear-gradient(180deg,#fff2cf,var(--gold) 70%,#b47d22);-webkit-background-clip:text;background-clip:text;color:transparent;text-wrap:balance}
+.founder .role{color:var(--parch);font-weight:500;margin:0;font-size:clamp(15px,1.6vw,18px)}
+.founder .role em{font-style:normal;color:var(--gold)}
+.hero .pitch{font-family:var(--f-prose);font-size:clamp(20px,2.3vw,26px);line-height:1.7;color:#f3e2bf;margin:26px 0 22px;max-width:30ch}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 24px;max-width:520px}
+.stat{padding:12px 14px;border-radius:16px;background:rgba(242,182,50,.06);border:1px solid var(--line)}
+.stat b{display:block;font-family:var(--f-display);font-size:clamp(24px,3vw,34px);color:var(--gold);line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.issue3d{perspective:1300px;display:grid;place-items:center}
+.issue3d .book{position:relative;width:min(100%,400px);aspect-ratio:1100/1424;transform-style:preserve-3d;transform:rotateY(-16deg) rotateX(6deg);transition:transform .25s ease-out;cursor:pointer;border-radius:6px}
+.issue3d .book img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:6px;box-shadow:-30px 40px 70px -20px rgba(0,0,0,.85),0 0 0 1px rgba(242,182,50,.25)}
+.issue3d .book::after{content:"";position:absolute;inset:0;border-radius:6px;background:linear-gradient(115deg,rgba(255,255,255,.22),transparent 40%,transparent 70%,rgba(255,220,150,.12));pointer-events:none;mix-blend-mode:screen}
+.issue3d .spine{position:absolute;top:2%;bottom:2%;right:-14px;width:16px;background:linear-gradient(90deg,#d8cbb1,#fff 40%,#cbbd9f);transform:rotateY(90deg) translateZ(-8px);transform-origin:left;border-radius:2px}
+.issue3d .badge{position:absolute;top:-16px;left:-16px;transform:translateZ(60px);background:var(--gold);color:var(--umber);font:800 14px var(--f-body);padding:8px 14px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+
+/* ===== الأبواب ===== */
+.doors{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:34px;perspective:1100px}
+.door{position:relative;display:flex;flex-direction:column;gap:10px;min-height:250px;padding:24px 22px;border-radius:24px;text-decoration:none;color:var(--parch);background:linear-gradient(160deg,rgba(60,42,22,.75),rgba(18,12,7,.85));border:1px solid var(--line);transform-style:preserve-3d;transition:transform .2s ease-out,border-color .3s,box-shadow .3s;overflow:hidden}
+.door:hover{border-color:var(--gold);box-shadow:0 30px 60px -20px rgba(242,182,50,.35)}
+.door .glare{position:absolute;inset:0;background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,225,150,.22),transparent 45%);pointer-events:none;opacity:0;transition:opacity .3s}
+.door:hover .glare{opacity:1}
+.door .num{font-family:var(--f-display);font-size:64px;line-height:.9;color:transparent;-webkit-text-stroke:1.5px var(--gold);transform:translateZ(50px)}
+.door h3{font-family:var(--f-display);font-size:24px;margin:0;color:#fff2d4;transform:translateZ(40px)}
+.door p{margin:0;color:var(--muted);font-size:14.5px;transform:translateZ(25px)}
+.door .go{margin-top:auto;display:inline-flex;align-items:center;gap:6px;color:var(--gold);font-weight:700;font-size:14px;transform:translateZ(30px)}
+.door .ico{position:absolute;left:16px;top:16px;width:54px;opacity:.5;transform:translateZ(20px)}
+.door.teal{background:linear-gradient(160deg,rgba(15,92,85,.55),rgba(12,20,16,.85))}
+
+/* ===== أ: صدر حديثاً ===== */
+.latest{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:24px;margin-top:30px}
+.latest .cover{padding:18px;display:grid;gap:14px;align-content:start}
+.latest .cover-img{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:820/760}
+.latest .cover-img img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 6s ease}
+.latest .cover:hover .cover-img img{transform:scale(1.12)}
+.latest .cover-img .cap{position:absolute;inset:auto 0 0 0;padding:40px 18px 14px;background:linear-gradient(transparent,rgba(11,8,5,.92));font-family:var(--f-display);font-size:clamp(22px,3vw,32px);color:#fff}
+.meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.meta div{padding:10px;border-radius:12px;background:rgba(242,182,50,.06);border:1px solid var(--line);text-align:center}
+.meta b{display:block;color:var(--gold);font-family:var(--f-display);font-size:20px;font-variant-numeric:tabular-nums}
+.meta span{font-size:12px;color:var(--muted)}
+.heads{padding:8px 0;display:flex;flex-direction:column;min-width:0}
+.heads-top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 20px 8px;flex-wrap:wrap}
+.heads-top h3{margin:0;font-family:var(--f-display);font-size:22px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:5px 12px;cursor:pointer;font:500 13px var(--f-body);min-height:34px}
+.chip[aria-pressed="true"]{background:var(--gold);color:var(--umber);border-color:var(--gold)}
+ol.hl{list-style:none;margin:0;padding:0 8px 8px;max-height:560px;overflow:auto;counter-reset:h}
+ol.hl li{counter-increment:h;display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;padding:12px;border-radius:14px;transition:background .2s}
+ol.hl li:hover{background:rgba(242,182,50,.07)}
+ol.hl li::before{content:counter(h);font-family:var(--f-display);color:var(--gold);font-size:20px;text-align:center;font-variant-numeric:tabular-nums}
+ol.hl .t{font-weight:700;line-height:1.5;color:#fbeed2;min-width:0}
+ol.hl .s{display:flex;gap:8px;margin-top:3px;font-size:12.5px;color:var(--faint);flex-wrap:wrap}
+ol.hl .s a{color:var(--muted);text-decoration:none;border-bottom:1px dotted}
+ol.hl .s a:hover{color:var(--gold)}
+ol.hl .pg{border:1px solid var(--line);background:rgba(242,182,50,.06);color:var(--gold);border-radius:10px;font:700 12px var(--f-body);padding:6px 10px;cursor:pointer;white-space:nowrap;min-height:36px}
+ol.hl .pg:hover{background:var(--gold);color:var(--umber)}
+
+/* ===== ب: جامع المؤشرات ===== */
+.collector{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.6fr);gap:24px;margin-top:30px;align-items:start}
+.searchbar{display:flex;gap:10px;padding:16px;flex-wrap:wrap}
+.searchbar input{flex:1;min-width:0;min-height:48px;border-radius:12px;border:1px solid var(--line);background:rgba(11,8,5,.6);color:var(--parch);padding:0 16px;font:500 16px var(--f-body)}
+.searchbar input::placeholder{color:var(--faint)}
+.tbl-wrap{overflow-x:auto;padding:0 8px 12px}
+table.tb{width:100%;border-collapse:separate;border-spacing:0 6px;min-width:560px}
+table.tb th{text-align:right;font-size:13px;color:var(--gold);font-weight:700;padding:8px 14px;border-bottom:1px solid var(--line)}
+table.tb td{padding:14px;background:rgba(242,182,50,.045);vertical-align:top}
+table.tb td:first-child{border-radius:0 12px 12px 0}
+table.tb td:last-child{border-radius:12px 0 0 12px}
+table.tb .n{font-family:var(--f-display);color:var(--gold);font-size:20px;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.tb tr.ex td{opacity:.6;font-style:italic}
+.empty{padding:22px;text-align:center;color:var(--faint);border:1px dashed var(--line);border-radius:14px;margin:10px 16px 16px}
+.side{display:grid;gap:18px}
+.card{padding:22px}
+.card h3{margin:0 0 6px;font-family:var(--f-display);font-size:21px;color:#fff1d0}
+.card p{margin:0 0 14px;color:var(--muted);font-size:15px}
+.results{padding:0 16px 16px;display:grid;gap:8px}
+.results .r{padding:10px 14px;border-radius:12px;background:rgba(242,182,50,.05);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.results .r b{font-weight:700}
+.results mark{background:rgba(242,182,50,.35);color:#fff;border-radius:4px;padding:0 2px}
+
+/* ===== ج: المناسبة ===== */
+.occasion{margin-top:30px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:24px;align-items:start}
+.article{padding:clamp(22px,4vw,48px);position:relative;overflow:hidden}
+.article::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 100% 0%,rgba(242,182,50,.14),transparent 50%);pointer-events:none}
+.article .kind{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.article h3{font-family:var(--f-display);font-size:clamp(26px,3.6vw,40px);margin:0 0 6px;color:#fff1d0;line-height:1.25}
+.article .date{color:var(--gold);font-weight:700;font-size:14px}
+.article .body{font-family:var(--f-prose);font-size:clamp(19px,1.9vw,22px);line-height:2;color:#f0e2c4;max-width:62ch;margin-top:18px}
+.article .body p{margin:0 0 1em}
+.article .body p:first-child::first-letter{font-family:var(--f-display);color:var(--gold);font-size:1.6em}
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:16px}
+.gallery .fr{aspect-ratio:4/3;border-radius:12px;border:1px dashed var(--gold-dim);display:grid;place-items:center;color:var(--faint);font-size:13px;background:repeating-linear-gradient(135deg,rgba(242,182,50,.04) 0 10px,transparent 10px 20px);text-align:center;padding:8px}
+.gallery .fr:first-child{grid-column:1/-1;aspect-ratio:16/9}
+
+/* ===== د: المناشط ===== */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
+.tab{display:flex;align-items:center;gap:10px;min-height:52px;padding:8px 18px 8px 14px;border-radius:16px;border:1px solid var(--line);background:var(--glass);color:var(--parch);cursor:pointer;font:700 15px var(--f-body);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:.25s}
+.tab .k{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(242,182,50,.12);color:var(--gold);font-family:var(--f-display)}
+.tab[aria-selected="true"]{background:var(--gold);color:var(--umber);border-color:var(--gold);transform:translateY(-2px);box-shadow:0 14px 30px -12px rgba(242,182,50,.7)}
+.tab[aria-selected="true"] .k{background:var(--umber);color:var(--gold)}
+.panel{margin-top:18px;animation:panelIn .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes panelIn{from{opacity:0;transform:translateY(16px) rotateX(6deg)}to{opacity:1;transform:none}}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding:22px 22px 6px}
+.panel-head h3{margin:0;font-family:var(--f-display);font-size:clamp(24px,3vw,32px);color:#fff1d0}
+.panel-head p{margin:2px 0 0;color:var(--muted)}
+.mw{--accent:var(--teal)}
+.mw .panel-head h3{color:#bff3ea}
+.mw .chip[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#06231f}
+.mw-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:22px;padding:16px 22px 24px;align-items:start}
+.poster{position:relative;border-radius:16px;overflow:hidden;cursor:zoom-in;border:1px solid rgba(20,184,166,.35);transform:perspective(900px) rotateY(6deg);transition:transform .4s;max-width:100%}
+.poster:hover{transform:perspective(900px) rotateY(0) scale(1.01)}
+.poster img{display:block;width:100%}
+.poster .zoom{position:absolute;left:10px;bottom:10px;background:rgba(6,35,31,.85);color:#bff3ea;font-size:12px;padding:4px 10px;border-radius:999px}
+.points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+.points div{padding:12px 14px;border-radius:12px;background:rgba(20,184,166,.07);border:1px solid rgba(20,184,166,.22)}
+.points b{display:block;color:#7fe6d7;font-size:15px}
+.points span{font-size:13.5px;color:var(--muted);line-height:1.6}
+.quote{font-family:var(--f-prose);font-size:21px;color:#e9f7f3;border-right:3px solid var(--teal);padding:4px 16px 4px 0;margin:6px 0 0}
+.series-note{padding:0 22px;color:var(--muted);font-size:14px}
+.placeholder-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:16px 22px 24px}
+.pc{border:1px dashed var(--gold-dim);border-radius:16px;padding:18px;min-height:170px;display:flex;flex-direction:column;gap:8px;background:rgba(242,182,50,.03)}
+.pc b{font-family:var(--f-display);font-size:19px;color:#f6e3b8}
+.pc span{color:var(--faint);font-size:14px}
+
+/* ===== السيرة والتواصل ===== */
+.cv{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:28px}
+.cv .pc{min-height:150px}
+.cv .pc svg{width:30px;height:30px;color:var(--gold)}
+.contact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:28px}
+.copy-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.copy-row code{font:600 15px var(--f-body);direction:ltr;background:rgba(11,8,5,.6);padding:8px 12px;border-radius:10px;border:1px solid var(--line);user-select:all;overflow-wrap:anywhere}
+footer{position:relative;z-index:1;border-top:1px solid var(--line);background:rgba(11,8,5,.8);padding-block:28px;color:var(--faint);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* ===== القارئ واللايت بوكس ===== */
+.modal{position:fixed;inset:0;z-index:90;background:rgba(6,4,2,.94);display:grid;grid-template-rows:auto minmax(0,1fr) auto;grid-template-columns:minmax(0,1fr);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.modal-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));color:var(--muted)}
+.modal-bar b{color:var(--gold);font-family:var(--f-display);font-size:18px}
+.x{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(242,182,50,.08);color:var(--gold);font-size:22px;cursor:pointer}
+.stage{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:0;padding:4px 8px}
+.stage img{display:block;max-height:100%;max-width:100%;object-fit:contain;border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.8)}
+#curl{display:block;touch-action:none;cursor:grab;border-radius:3px;box-shadow:0 24px 70px rgba(0,0,0,.75)}
+#curl:active{cursor:grabbing}
+.hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:12.5px;color:var(--muted);background:rgba(11,8,5,.75);padding:3px 12px;border-radius:999px;pointer-events:none;transition:opacity .6s;white-space:nowrap}
+.modal-ctl{display:flex;justify-content:center;align-items:center;gap:8px;padding:8px 12px;min-width:0}
+.modal-ctl input[type=range]{flex:1;min-width:0;max-width:360px;accent-color:var(--gold)}
+.modal-ctl .btn{padding:0 14px;flex:none}
+.modal-bar b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+@media (max-width:980px){
+  .hero-grid,.latest,.collector,.occasion,.mw-grid{grid-template-columns:minmax(0,1fr)}
+  .doors{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cv{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .contact,.placeholder-cards{grid-template-columns:minmax(0,1fr)}
+  .issue3d .book{width:min(78%,340px)}
+}
+@media (max-width:560px){
+  .founder{flex-direction:column;align-items:flex-start}
+  .doors{grid-template-columns:minmax(0,1fr)}
+  .door{min-height:190px}
+  .points,.cv{grid-template-columns:minmax(0,1fr)}
+  .sound .lbl{display:none}
+  .tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tab{font-size:13.5px;padding:8px 10px}
+  .brand small{display:none}
+  ol.hl li{grid-template-columns:30px 1fr}
+  ol.hl .pg{grid-column:2;justify-self:start}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+
+<!-- الافتتاحية -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-box">
+    <svg viewBox="0 0 300 190" fill="none">
+      <path class="arc" d="M30 160 A120 120 0 0 1 270 160" stroke="#F2B632" stroke-width="6" stroke-linecap="round"/>
+      <g stroke="#F2B632" stroke-width="3" opacity=".7">
+        <path d="M44 120l14 7M80 70l10 12M150 44v16M220 70l-10 12M256 120l-14 7"/>
+      </g>
+      <g class="ndl"><path d="M150 160 L146 70 L150 58 L154 70 Z" fill="#ffe39a"/></g>
+      <circle cx="150" cy="160" r="12" fill="#F2B632"/><circle cx="150" cy="160" r="5" fill="#1a120b"/>
+    </svg>
+    <h1>المؤشر</h1>
+    <p>يرصد أهم ما يُنشر في الصحافة السعودية والشبكات الإخبارية يومياً</p>
+    <button class="btn ghost skip" id="enter" type="button">ادخل الموقع</button>
+  </div>
+</div>
+
+<!-- الخلفية الثابتة -->
+<div class="backdrop" aria-hidden="true">
+  <div class="layer on" data-bg="emblem">
+    <svg class="emblem" viewBox="0 0 600 420" fill="none">
+      <path d="M60 330 A240 240 0 0 1 540 330" stroke="#F2B632" stroke-width="10"/>
+      <path d="M110 330 A190 190 0 0 1 490 330" stroke="#F2B632" stroke-width="2" stroke-dasharray="4 14"/>
+      <g stroke="#F2B632" stroke-width="5"><path d="M86 230l26 14M160 132l18 22M300 92v28M440 132l-18 22M514 230l-26 14"/></g>
+      <g class="needle"><path d="M300 330 L292 140 L300 110 L308 140 Z" fill="#F2B632"/></g>
+      <circle cx="300" cy="330" r="22" fill="#F2B632"/>
+      <text x="300" y="405" text-anchor="middle" font-family="El Messiri, serif" font-size="58" fill="#F2B632">المؤشر</text>
+    </svg>
+  </div>
+  <div class="layer" data-bg="cover" style="background-image:url('cover-art.jpg')"></div>
+  <div class="layer" data-bg="poster" style="background-image:url('mawadda-poster.jpg')"></div>
+  <div class="pattern"></div>
+  <canvas id="dust"></canvas>
+  <div class="veil"></div>
+</div>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#home" data-snd="tick">
+      <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" stroke="#F2B632" stroke-width="1.5"/><path d="M8 26a12 12 0 0 1 24 0" stroke="#F2B632" stroke-width="2.5" stroke-linecap="round"/><path d="M20 26l7-10" stroke="#ffe39a" stroke-width="2.5" stroke-linecap="round"/><circle cx="20" cy="26" r="2.6" fill="#F2B632"/></svg>
+      <span><b>المؤشر</b><small>منصة فؤاد المشيخص</small></span>
+    </a>
+    <nav class="main" aria-label="أقسام الموقع">
+      <a href="#latest">المؤشر</a>
+      <a href="#collector">جامع المؤشرات</a>
+      <a href="#occasion">المناسبة الحالية</a>
+      <a href="#activities">المناشط</a>
+      <a href="#cv">السيرة</a>
+      <a href="#contact">تواصل</a>
+    </nav>
+    <button class="sound" id="snd" type="button" aria-pressed="true" title="الأصوات التفاعلية">
+      <svg class="on-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      <svg class="off-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg>
+      <span class="lbl">الصوت</span>
+    </button>
+  </div>
+</header>
+
+<main>
+<!-- ===== البطل ===== -->
+<section class="hero" id="home" data-bg="emblem">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <div class="founder">
+        <div class="portrait">
+          <div class="ph"><img src="founder.jpg" alt="الأستاذ فؤاد المشيخص" width="1218" height="1624"></div>
+        </div>
+        <div>
+          <span class="eyebrow">المؤسس ورئيس التحرير</span>
+          <h1>فؤاد المشيخص</h1>
+          <p class="role">مؤسس <em>المؤشر الإعلامي</em> · كاتب ومهتم بالشأن الاجتماعي والأسري</p>
+        </div>
+      </div>
+      <p class="pitch">ثمانية عشر عاماً من الرصد اليومي لما تنشره الصحافة السعودية والشبكات الإخبارية، في عدد واحد يصلك كل صباح.</p>
+      <div class="stats">
+        <div class="stat"><b data-count="6512">6512</b><span>عدداً حتى الآن</span></div>
+        <div class="stat"><b data-count="18">18</b><span>عاماً من الإصدار</span></div>
+        <div class="stat"><b data-count="33">33</b><span>صفحة في العدد الأخير</span></div>
+      </div>
+      <div class="cta">
+        <a class="btn pri" href="#latest" data-snd="chime">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"/><path d="M18 8h2v11a2 2 0 0 1-2 2"/><path d="M8 9h6M8 13h6"/></svg>
+          اقرأ العدد 6512
+        </a>
+        <a class="btn ghost" href="#cv" data-snd="chime">السيرة الذاتية</a>
+      </div>
+    </div>
+    <div class="issue3d reveal">
+      <div class="book" id="book" role="button" tabindex="0" aria-label="افتح العدد 6512 في القارئ">
+        <img src="pages/page-1.jpg" alt="غلاف المؤشر الإعلامي العدد 6512: 64% من العمالة المنزلية ذكور" width="1100" height="1424">
+        <div class="spine"></div>
+        <span class="badge">صدر حديثاً</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="doors" id="doors">
+      <a class="door" href="#latest" data-snd="chime">
+        <span class="glare"></span>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#F2B632" stroke-width="1.3"><path d="M3 17a9 9 0 0 1 18 0"/><path d="M12 17l5-6"/><circle cx="12" cy="17" r="1.5"/></svg>
+        <span class="num">أ</span>
+        <h3>المؤشر</h3>
+        <p>العدد الصادر حديثاً بعناوينه وصفحاته ومصادره.</p>
+        <span class="go">ادخل ←</span>
+      </a>
+      <a class="door" href="#collector" data-snd="chime">
+        <span class="glare"></span>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#F2B632" stroke-width="1.3"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg>
+        <span class="num">ب</span>
+        <h3>جامع المؤشرات</h3>
+        <p>أرشيف الأعداد وفهرس عناوينها مع بحث فوري.</p>
+        <span class="go">ادخل ←</span>
+      </a>
+      <a class="door" href="#occasion" data-snd="chime">
+        <span class="glare"></span>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#F2B632" stroke-width="1.3"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m10 15 1.5 1.5L15 13"/></svg>
+        <span class="num">ج</span>
+        <h3>المناسبة الحالية</h3>
+        <p>مقال المناسبة العالمية أو الوطنية أو الاجتماعية وصورها.</p>
+        <span class="go">ادخل ←</span>
+      </a>
+      <a class="door teal" href="#activities" data-snd="chime">
+        <span class="glare"></span>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="1.3"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg>
+        <span class="num">د</span>
+        <h3>المناشط</h3>
+        <p>مودة ورحمة، القطيف اليومية، الموروث الشعبي، والمناسبات المؤرشفة.</p>
+        <span class="go">ادخل ←</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== أ: المؤشر ===== -->
+<section class="sec" id="latest" data-bg="cover">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow"><span class="let">أ</span> المؤشر · صدر حديثاً</span>
+      <h2 class="h">المؤشر الإعلامي، العدد 6512</h2>
+      <p class="lead">الخميس 17 جمادى الأولى 1448هـ، الموافق 28 أكتوبر 2026م. واحد وعشرون موضوعاً من الصحف السعودية والشبكات الإخبارية، لكل عنوان صفحته في العدد ورابط مصدره.</p>
+    </div>
+    <div class="latest">
+      <div class="glass cover reveal">
+        <div class="cover-img">
+          <img src="cover-art.jpg" alt="صورة موضوع الغلاف: العمالة المنزلية" width="820" height="760" loading="lazy">
+          <div class="cap">64% من العمالة المنزلية ذكور</div>
+        </div>
+        <div class="meta">
+          <div><b>6512</b><span>رقم العدد</span></div>
+          <div><b>33</b><span>صفحة</span></div>
+          <div><b>18</b><span>السنة</span></div>
+        </div>
+        <button class="btn pri" type="button" data-read="1" data-snd="chime">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 5c3-1 6-1 10 1 4-2 7-2 10-1v14c-3-1-6-1-10 1-4-2-7-2-10-1z"/><path d="M12 6v14"/></svg>
+          تصفّح العدد كاملاً
+        </button>
+      </div>
+      <div class="glass heads reveal">
+        <div class="heads-top">
+          <h3>عناوين العدد</h3>
+          <div class="chips" id="catChips" role="group" aria-label="تصفية حسب الباب"></div>
+        </div>
+        <ol class="hl" id="hlList"></ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ب: جامع المؤشرات ===== -->
+<section class="sec" id="collector" data-bg="emblem">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow"><span class="let">ب</span> جامع المؤشرات</span>
+      <h2 class="h">كل الأعداد في مكان واحد</h2>
+      <p class="lead">أرشيف المؤشر عدداً بعد عدد، وفهرس بحثي يجمع عناوين الأعداد كلها. ابحث بكلمة مثل «النفط» أو «الأسرة» لتصل إلى الموضوع وصفحته.</p>
+    </div>
+    <div class="collector">
+      <div class="glass reveal">
+        <div class="searchbar">
+          <label for="q" class="tag" style="align-self:center">بحث</label>
+          <input id="q" type="search" placeholder="ابحث في عناوين الأعداد…" autocomplete="off">
+        </div>
+        <div class="results" id="results" hidden></div>
+        <div class="tbl-wrap">
+          <table class="tb">
+            <thead><tr><th>العدد</th><th>التاريخ</th><th>موضوع الغلاف</th><th>الصفحات</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="n">6512</td>
+                <td>الخميس 1448/5/17هـ<br><span style="color:var(--faint);font-size:13px">2026/10/28م</span></td>
+                <td><b>64% من العمالة المنزلية ذكور</b><br><span style="color:var(--faint);font-size:13px">21 موضوعاً</span></td>
+                <td class="n" style="font-size:16px">33</td>
+                <td><button class="chip" type="button" data-read="1" data-snd="chime">اقرأ</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="empty">تُضاف الأعداد السابقة هنا تباعاً. أرسل ملفات PDF للأعداد وسيُبنى فهرسها تلقائياً.</div>
+        </div>
+      </div>
+      <div class="side">
+        <div class="glass card reveal">
+          <h3>اشترك في المؤشر اليومي</h3>
+          <p>يصلك العدد كل صباح عبر مجموعة المؤشر الإعلامي البريدية.</p>
+          <a class="btn pri" href="http://groups.google.com/group/almoasher_alealami?hl=ar" target="_blank" rel="noopener">الانضمام للمجموعة</a>
+        </div>
+        <div class="glass card reveal">
+          <h3>كاريكاتير العدد</h3>
+          <p>الصفحة الأخيرة من كل عدد مخصصة لكاريكاتير اليوم.</p>
+          <button class="btn ghost" type="button" data-read="33" data-snd="chime">افتح الصفحة 33</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ج: المناسبة الحالية ===== -->
+<section class="sec" id="occasion" data-bg="emblem">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow"><span class="let">ج</span> المناسبة الحالية</span>
+      <h2 class="h">مقال المناسبة</h2>
+      <p class="lead">مقال يرافق المناسبة العالمية أو الإقليمية أو الوطنية أو الاجتماعية. حين تتغير المناسبة ينتقل المقال تلقائياً إلى جدول «المناسبات المؤرشفة».</p>
+    </div>
+    <div class="occasion">
+      <article class="glass article reveal" id="occArticle"></article>
+      <div class="glass reveal">
+        <div class="heads-top"><h3 style="font-size:19px">صور الفعالية</h3><span class="tag sample">بانتظار الصور</span></div>
+        <div class="gallery">
+          <div class="fr">الصورة الرئيسية للفعالية</div>
+          <div class="fr">صورة 2</div>
+          <div class="fr">صورة 3</div>
+        </div>
+        <div style="padding:0 16px 18px"><a class="btn ghost" href="#archived" data-tab="4" data-snd="chime" style="width:100%">المناسبات المؤرشفة</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== د: المناشط ===== -->
+<section class="sec" id="activities" data-bg="poster">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow"><span class="let">د</span> المناشط</span>
+      <h2 class="h">حضور في المجتمع والإعلام</h2>
+      <p class="lead">أعمال المؤسس مع الجمعيات والمجلات الإلكترونية، مرتبة في أربعة أبواب.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="المناشط" id="archived">
+      <button class="tab" role="tab" id="t1" aria-controls="p1" aria-selected="true" data-snd="tab"><span class="k">1</span>جمعية مودة ورحمة</button>
+      <button class="tab" role="tab" id="t2" aria-controls="p2" aria-selected="false" data-snd="tab"><span class="k">2</span>القطيف اليومية</button>
+      <button class="tab" role="tab" id="t3" aria-controls="p3" aria-selected="false" data-snd="tab"><span class="k">3</span>مجلة الموروث الشعبي</button>
+      <button class="tab" role="tab" id="t4" aria-controls="p4" aria-selected="false" data-snd="tab"><span class="k">4</span>المناسبات المؤرشفة</button>
+    </div>
+
+    <div class="glass panel mw" role="tabpanel" id="p1" aria-labelledby="t1">
+      <div class="panel-head">
+        <div><h3>جمعية مودة ورحمة للتنمية الأسرية</h3><p>ندوات ومقالات وإضاءات توعوية في جودة الحياة الأسرية.</p></div>
+        <div class="chips" id="mwChips" role="group" aria-label="نوع المحتوى">
+          <button class="chip" type="button" aria-pressed="false" data-f="nadwa">ندوات</button>
+          <button class="chip" type="button" aria-pressed="false" data-f="maqal">مقالات</button>
+          <button class="chip" type="button" aria-pressed="true" data-f="idaa">إضاءات توعوية</button>
+        </div>
+      </div>
+      <div id="mw-idaa" class="mw-grid">
+        <figure class="poster" id="poster" style="margin:0" role="button" tabindex="0" aria-label="تكبير الإضاءة">
+          <img src="mawadda-poster.jpg" alt="إضاءة جودة حياة: احترام الجد والجدة ومعرفة مكانتهما" width="1055" height="1491" loading="lazy">
+          <span class="zoom">اضغط للتكبير</span>
+        </figure>
+        <div>
+          <span class="tag" style="background:rgba(20,184,166,.12);color:#7fe6d7;border-color:rgba(20,184,166,.35)">جودة حياة | قيم أسرية</span>
+          <h3 style="font-family:var(--f-display);font-size:clamp(24px,3vw,34px);margin:10px 0 4px;color:#fff1d0;line-height:1.3">احترام الجد والجدة ومعرفة مكانتهما</h3>
+          <p style="margin:0;color:var(--muted)">الجد والجدة جذور العائلة وذاكرة الأجيال؛ في احترامهما وفاء للماضي وقيمة نغرسها للمستقبل. كيف نغرس احترامهما في نفوس الأحفاد؟</p>
+          <div class="points">
+            <div><b>الاستفادة من خبراتهما</b><span>تشجيع الأحفاد على الاستماع إلى قصصهما وتجاربهما.</span></div>
+            <div><b>تقدير مكانتهما</b><span>مخاطبتهما بأدب واحترام والاعتزاز بوجودهما.</span></div>
+            <div><b>التواصل والزيارة</b><span>أوقات منتظمة لزيارتهما والسؤال عنهما.</span></div>
+            <div><b>إشراكهما في المناسبات</b><span>حضورهما في اللقاءات العائلية والاستئناس برأيهما.</span></div>
+            <div><b>مراعاة احتياجاتهما</b><span>المساعدة عند الحاجة واحترام ظروفهما الصحية والنفسية.</span></div>
+            <div><b>تعزيز العلاقة بين الأجيال</b><span>تعبير الأحفاد عن محبتهم وإدخال السرور إلى قلبيهما.</span></div>
+          </div>
+          <p class="quote">الجد والجدة ليسا مجرد ذكرى من الماضي… بل قيمة حاضرة تُثري حياة الأسرة.</p>
+        </div>
+      </div>
+      <div id="mw-nadwa" hidden><div class="empty">لم تُضف ندوات بعد. أرسل عنوان الندوة وتاريخها ومكانها وصورها أو رابط تسجيلها.</div></div>
+      <div id="mw-maqal" hidden><div class="empty">لم تُضف مقالات بعد. أرسل نصوص المقالات أو روابطها.</div></div>
+    </div>
+
+    <div class="glass panel" role="tabpanel" id="p2" aria-labelledby="t2" hidden>
+      <div class="panel-head"><div><h3>القطيف اليومية</h3><p>مجلة إلكترونية. مقالات مجدولة كسلسلة مرتبة.</p></div><span class="tag sample">صفوف نموذجية</span></div>
+      <p class="series-note">كل مقال في السلسلة يظهر برقمه وعنوانه وأهم أفكاره. الصفوف أدناه توضّح الشكل فقط إلى أن تصل مقالاتك.</p>
+      <div class="tbl-wrap">
+        <table class="tb">
+          <thead><tr><th style="width:80px">الرقم</th><th>العنوان</th><th>أهم الأفكار</th></tr></thead>
+          <tbody>
+            <tr class="ex"><td class="n">1</td><td>عنوان المقال الأول في السلسلة</td><td>الفكرة الأولى · الفكرة الثانية · الفكرة الثالثة</td></tr>
+            <tr class="ex"><td class="n">2</td><td>عنوان المقال الثاني</td><td>تُكتب هنا خلاصة المقال في سطرين</td></tr>
+            <tr class="ex"><td class="n">3</td><td>عنوان المقال الثالث</td><td>…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="glass panel" role="tabpanel" id="p3" aria-labelledby="t3" hidden>
+      <div class="panel-head"><div><h3>مجلة الموروث الشعبي الإلكترونية</h3><p>مملكة البحرين</p></div><span class="tag sample">بانتظار المحتوى</span></div>
+      <div class="placeholder-cards">
+        <div class="pc"><b>مقالات منشورة</b><span>عنوان المقال، تاريخ النشر، ورابطه في المجلة.</span></div>
+        <div class="pc"><b>دراسات في الموروث</b><span>الأبحاث أو السلاسل المتعلقة بالتراث الشعبي.</span></div>
+        <div class="pc"><b>صور وشواهد</b><span>صور المقالات أو الفعاليات المرتبطة بالمجلة.</span></div>
+      </div>
+    </div>
+
+    <div class="glass panel" role="tabpanel" id="p4" aria-labelledby="t4" hidden>
+      <div class="panel-head"><div><h3>المناسبات المؤرشفة</h3><p>كل مناسبة انتهت تنتقل هنا بمقالها وصورها.</p></div></div>
+      <div class="tbl-wrap">
+        <table class="tb">
+          <thead><tr><th>التاريخ</th><th>المناسبة</th><th>نوعها</th><th>المقال</th></tr></thead>
+          <tbody id="occArchive"></tbody>
+        </table>
+        <div class="empty" id="occEmpty">لا توجد مناسبات مؤرشفة بعد. أول مناسبة تُستبدل في القسم «ج» ستظهر هنا.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== السيرة ===== -->
+<section class="sec" id="cv" data-bg="emblem">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">السيرة الذاتية</span>
+      <h2 class="h">عن المؤسس</h2>
+      <p class="lead">تُعرض السيرة الذاتية هنا فور رفعها، مقسمة إلى أبواب يسهل تصفحها، مع نسخة كاملة للتحميل.</p>
+    </div>
+    <div class="cv">
+      <div class="pc glass reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg><b>المؤهلات العلمية</b><span>الشهادات والتخصص وجهات الدراسة.</span></div>
+      <div class="pc glass reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V4h6v3"/></svg><b>المسيرة المهنية</b><span>المناصب والعضويات في الجمعيات واللجان.</span></div>
+      <div class="pc glass reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h5"/></svg><b>الإصدارات والمقالات</b><span>الكتب والدراسات وسلاسل المقالات.</span></div>
+      <div class="pc glass reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="9" r="6"/><path d="m8 14-2 7 6-3 6 3-2-7"/></svg><b>الجوائز والتكريمات</b><span>الشهادات وجوائز العمل الاجتماعي والإعلامي.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== التواصل ===== -->
+<section class="sec" id="contact" data-bg="emblem" style="padding-top:0">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">تواصل</span>
+      <h2 class="h">للتواصل والاشتراك</h2>
+    </div>
+    <div class="contact">
+      <div class="glass card reveal">
+        <h3>البريد الإلكتروني</h3>
+        <p>للمراسلات والمقترحات.</p>
+        <div class="copy-row"><code id="mail">faaam2001@gmail.com</code><button class="chip" type="button" id="copyMail">نسخ</button></div>
+      </div>
+      <div class="glass card reveal">
+        <h3>المجموعة البريدية</h3>
+        <p>استقبل المؤشر الإعلامي يومياً.</p>
+        <a class="btn ghost" href="http://groups.google.com/group/almoasher_alealami?hl=ar" target="_blank" rel="noopener">صفحة المجموعة</a>
+      </div>
+      <div class="glass card reveal">
+        <h3>حسابات التواصل</h3>
+        <p>واتساب، إكس، إنستغرام، يوتيوب… تُضاف عند تزويدنا بها.</p>
+        <span class="tag sample">بانتظار الروابط</span>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>المؤشر · منصة فؤاد المشيخص</span>
+    <span>المؤشر الإعلامي يرصد أهم ما يُنشر في الصحافة السعودية والشبكات الإخبارية بصورة يومية</span>
+  </div>
+</footer>
+
+<!-- القارئ -->
+<div class="modal" id="reader" hidden role="dialog" aria-modal="true" aria-label="قارئ العدد">
+  <div class="modal-bar"><b>المؤشر الإعلامي · العدد 6512</b><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
+  <div class="stage" id="stage"><canvas id="curl" role="img" aria-label="صفحة من العدد"></canvas><span class="hint" id="hint">اسحب ركن الصفحة لتقليبها</span></div>
+  <div class="modal-ctl">
+    <button class="btn ghost" type="button" id="next" aria-label="الصفحة التالية">التالية</button>
+    <input type="range" id="pageRange" min="1" max="33" value="1" aria-label="رقم الصفحة">
+    <span id="pageNo" style="min-width:64px;text-align:center;font-variant-numeric:tabular-nums">1 / 33</span>
+    <button class="btn ghost" type="button" id="prev" aria-label="الصفحة السابقة">السابقة</button>
+  </div>
+</div>
+<div class="modal" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="الإضاءة مكبرة">
+  <div class="modal-bar"><b>جمعية مودة ورحمة · جودة حياة</b><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
+  <div class="stage"><img src="mawadda-poster.jpg" alt="إضاءة احترام الجد والجدة مكبرة"></div>
+  <div></div>
+</div>
+
+<script>
+document.documentElement.classList.add('js');
+document.documentElement.lang='ar'; document.documentElement.dir='rtl';
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = (s, r=document) => r.querySelector(s), $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+/* ---------- الأصوات التفاعلية (خافتة) ---------- */
+const Snd = (() => {
+  let ctx = null, master = null, on = true;
+  try { const v = localStorage.getItem('mo-sound'); if (v === '0') on = false; } catch (e) {}
+  function init(){ if (ctx) return; try { ctx = new (window.AudioContext||window.webkitAudioContext)(); master = ctx.createGain(); master.gain.value = .55; master.connect(ctx.destination);} catch(e){} }
+  function note(f, t0, dur, vol, type='sine'){
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.value = f;
+    g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(vol, t0+.012); g.gain.exponentialRampToValueAtTime(.0001, t0+dur);
+    o.connect(g); g.connect(master); o.start(t0); o.stop(t0+dur+.05);
+  }
+  function play(kind){
+    if (!on) return; init(); if (!ctx) return; if (ctx.state === 'suspended') ctx.resume();
+    const t = ctx.currentTime;
+    if (kind === 'hover') note(2093, t, .07, .012);
+    else if (kind === 'tick') note(1568, t, .09, .03, 'triangle');
+    else if (kind === 'tab') { note(880, t, .16, .035, 'triangle'); note(1319, t+.05, .2, .025); }
+    else if (kind === 'chime') { [784, 1175, 1568].forEach((f,i)=>note(f, t+i*.07, .9, .03)); note(392, t, 1.1, .02); }
+    else if (kind === 'flip') {
+      const n = ctx.sampleRate*.18, b = ctx.createBuffer(1, n, ctx.sampleRate), d = b.getChannelData(0);
+      for (let i=0;i<n;i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/n, 2);
+      const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+      f.type = 'bandpass'; f.frequency.value = 2400; f.Q.value = .7; g.gain.value = .06;
+      s.buffer = b; s.connect(f); f.connect(g); g.connect(master); s.start(t);
+    }
+  }
+  function toggle(){ on = !on; try { localStorage.setItem('mo-sound', on?'1':'0'); } catch(e){} if (on) play('tick'); return on; }
+  return { play, toggle, get on(){ return on; } };
+})();
+const sndBtn = $('#snd');
+sndBtn.setAttribute('aria-pressed', String(Snd.on));
+sndBtn.addEventListener('click', () => sndBtn.setAttribute('aria-pressed', String(Snd.toggle())));
+document.addEventListener('click', e => { const el = e.target.closest('[data-snd]'); if (el) Snd.play(el.dataset.snd); });
+let lastHover = 0;
+document.addEventListener('pointerover', e => {
+  if (e.pointerType !== 'mouse') return;
+  const el = e.target.closest('.btn,.door,.tab,.chip,nav.main a,ol.hl li');
+  if (el && el !== lastHover) { lastHover = el; Snd.play('hover'); }
+});
+
+/* ---------- الافتتاحية ---------- */
+const intro = $('#intro');
+const closeIntro = () => intro.classList.add('gone');
+$('#enter').addEventListener('click', () => { Snd.play('chime'); closeIntro(); });
+setTimeout(closeIntro, RM ? 0 : 2300);
+
+/* ---------- غبار ذهبي خلفي ---------- */
+(() => {
+  const c = $('#dust'), x = c.getContext('2d'); let W, H, P = [];
+  const size = () => { const d = Math.min(devicePixelRatio||1, 2); W = c.width = innerWidth*d; H = c.height = innerHeight*d; P = Array.from({length: Math.round(innerWidth/14)}, () => ({x:Math.random()*W, y:Math.random()*H, r:(Math.random()*1.6+.4)*d, v:(Math.random()*.25+.05)*d, a:Math.random()*.5+.15, p:Math.random()*6})); };
+  size(); addEventListener('resize', size);
+  const draw = t => {
+    x.clearRect(0,0,W,H);
+    for (const p of P){ p.y -= p.v; if (p.y < -5) { p.y = H+5; p.x = Math.random()*W; }
+      x.globalAlpha = p.a*(.6+.4*Math.sin(t/900+p.p)); x.fillStyle = '#F2B632'; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 7); x.fill(); }
+    if (!RM) requestAnimationFrame(draw);
+  };
+  requestAnimationFrame(draw);
+})();
+
+/* ---------- الخلفية الثابتة تتبدّل حسب القسم ---------- */
+const layers = $$('.backdrop .layer');
+const secIO = new IntersectionObserver(es => es.forEach(en => {
+  if (!en.isIntersecting) return;
+  const bg = en.target.dataset.bg; layers.forEach(l => l.classList.toggle('on', l.dataset.bg === bg));
+  const id = en.target.id; $$('nav.main a').forEach(a => a.classList.toggle('cur', a.getAttribute('href') === '#'+id));
+}), {rootMargin: '-45% 0px -50% 0px'});
+$$('[data-bg]').forEach(s => s.tagName === 'SECTION' && secIO.observe(s));
+
+/* ---------- ظهور تدريجي من حالة مرئية ---------- */
+const rv = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.remove('pre'); rv.unobserve(en.target); } }), {threshold: .12});
+requestAnimationFrame(() => $$('.reveal').forEach(el => { const r = el.getBoundingClientRect(); if (r.top > innerHeight) { el.classList.add('pre'); rv.observe(el); } }));
+
+/* ---------- عدّاد الأرقام ---------- */
+if (!RM) $$('[data-count]').forEach(el => { const end = +el.dataset.count, t0 = performance.now(), d = 1800 + Math.min(end, 2000)/4;
+  const step = t => { const k = Math.min((t - t0 - 2000)/d, 1); el.textContent = k < 0 ? '0' : Math.round(end*(1-Math.pow(1-k,3))); if (k < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); });
+
+/* ---------- ميلان ثلاثي الأبعاد ---------- */
+function tilt(el, max=12){
+  if (RM) return;
+  el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(), px = (e.clientX - r.left)/r.width, py = (e.clientY - r.top)/r.height;
+    el.style.transform = `rotateY(${(px-.5)*max}deg) rotateX(${(.5-py)*max}deg) translateZ(10px)`; el.style.setProperty('--gx', px*100+'%'); el.style.setProperty('--gy', py*100+'%'); });
+  el.addEventListener('pointerleave', () => el.style.transform = '');
+}
+$$('.door').forEach(d => tilt(d, 14));
+const book = $('#book');
+if (!RM) { book.addEventListener('pointermove', e => { const r = book.getBoundingClientRect(), px = (e.clientX-r.left)/r.width, py = (e.clientY-r.top)/r.height; book.style.transform = `rotateY(${-16+(px-.5)*22}deg) rotateX(${6+(.5-py)*14}deg)`; });
+  book.addEventListener('pointerleave', () => book.style.transform = ''); }
+
+/* ---------- عناوين العدد 6512 ---------- */
+const CATS = {all:'الكل', soc:'مجتمع', eco:'اقتصاد', loc:'محليات', hlth:'صحة', pol:'سياسة', misc:'منوعات'};
+const HEADS = [
+ ['64% من العمالة المنزلية ذكور',1,'soc','alwatan.com.sa','https://www.alwatan.com.sa/article/1188202','الوطن'],
+ ['ارتفاع عدد مواقع التمعدن المكتشفة في المملكة لـ 5,680 موقعاً',5,'eco','alriyadh.com','https://www.alriyadh.com/2212907','الرياض'],
+ ['وزير الإعلام السعودي: نرفض استهداف الوحدة الخليجية وسنشدد الرقابة على المخالفين',7,'loc','aleqt.com','https://www.aleqt.com/15841','الاقتصادية'],
+ ['فجوة سعرية تزيد على 60% لقطع الغيار',9,'eco','alwatan.com.sa','https://www.alwatan.com.sa/article/1188204','الوطن'],
+ ['التجارة تحسم جدل المنتجات غير المطابقة',12,'eco','alwatan.com.sa','https://www.alwatan.com.sa/article/1188195','الوطن'],
+ ['السعودية في المرتبة الـ12 بين 93 دولة في إنتاج الكهرباء',14,'eco','al-madina.com','https://www.al-madina.com/article/1011158','المدينة'],
+ ['دراسة تحذر: إصابات الخرف الجديدة تتجاوز 24 مليون حالة سنوياً بحلول 2050',15,'hlth','okaz.com.sa','https://www.okaz.com.sa/variety/na/2272991','عكاظ'],
+ ['بعد عامين فقط.. أثر خفي للهواتف الذكية يظهر لدى المراهقين',19,'hlth','alarabiya.net','https://www.alarabiya.net/science/2026/10/29','العربية'],
+ ['كيف نتمرن بدون جهد؟',22,'hlth','alwatan.com.sa','https://www.alwatan.com.sa/article/1188125','الوطن'],
+ ['عدد القاطنين يشعل الخلاف بين المالك والمستأجر',24,'soc','alwatan.com.sa','https://www.alwatan.com.sa/article/1188166','الوطن'],
+ ['استطلاع دولي: الضغوط المالية تكبح الإنجاب وتتصدر المخاوف العالمية',26,'soc','alwatan.com.sa','https://www.alwatan.com.sa/article/1188141','الوطن'],
+ ['مؤسسة خيرية عربية تستغل القاصرين.. كيف سقطت؟',29,'soc','okaz.com.sa','https://www.okaz.com.sa/variety/na/2272841','عكاظ'],
+ ['التحالف: اعتراض وتدمير صاروخ باليستي أطلقته الميليشيا الحوثية باتجاه المنطقة الشرقية',30,'pol','okaz.com.sa','https://www.okaz.com.sa/local/na/2273000','عكاظ'],
+ ['تعز تدعو إلى تحقيق عاجل بشأن قذائف حوثية يشتبه باحتوائها على مواد سامة محرمة دولياً',30,'pol','okaz.com.sa','https://www.okaz.com.sa/politics/na/2272995','عكاظ'],
+ ['النفط يرتفع بنحو 2%.. وبرنت عند 115.69 دولاراً للبرميل',31,'eco','alyaum.com','https://www.alyaum.com/articles/6688867','اليوم'],
+ ['لأول مرة منذ 2022.. أسعار الغاز الطبيعي في أوروبا تبلغ 100 يورو',31,'eco','alyaum.com','https://www.alyaum.com/articles/6688909','اليوم'],
+ ['إيران تبحث مع الوسطاء سبل تنفيذ خطة الأيام السبعة لإنهاء الحرب',32,'pol','alyaum.com','https://www.alyaum.com/articles/6688902','اليوم'],
+ ['ضربات محتملة على إيران تستهدف قيادات النظام ومنشآت الطاقة',32,'pol','okaz.com.sa','https://www.okaz.com.sa/politics/na/2272953','عكاظ'],
+ ['الكويت تستدعي سفير إيران للاحتجاج على تدخلاتها في شؤون البلاد',32,'pol','okaz.com.sa','https://www.okaz.com.sa/politics/na/2272886','عكاظ'],
+ ['زلزال بقوة 5.7 درجات يضرب بابوا غينيا الجديدة',32,'misc','al-madina.com','https://www.al-madina.com/article/1011172','المدينة'],
+ ['كاريكاتير اليوم',33,'misc','aawsat.com','https://aawsat.com/cartoon/5334969-','الشرق الأوسط'],
+];
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let curCat = 'all';
+function renderHeads(){
+  $('#hlList').innerHTML = HEADS.filter(h => curCat === 'all' || h[2] === curCat).map(h =>
+    `<li><div class="t">${esc(h[0])}<div class="s"><span>${CATS[h[2]]}</span><span>·</span><a href="${h[4]}" target="_blank" rel="noopener">المصدر: ${h[5]}</a></div></div><button class="pg" type="button" data-read="${h[1]}" data-snd="flip">صفحة ${h[1]}</button></li>`).join('');
+}
+$('#catChips').innerHTML = Object.entries(CATS).map(([k,v]) => `<button class="chip" type="button" data-cat="${k}" aria-pressed="${k==='all'}" data-snd="tick">${v}</button>`).join('');
+$('#catChips').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; curCat = b.dataset.cat; $$('#catChips .chip').forEach(c => c.setAttribute('aria-pressed', String(c === b))); renderHeads(); });
+renderHeads();
+
+/* ---------- البحث في جامع المؤشرات ---------- */
+const norm = s => s.replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/[ًٌٍَُِّْـ]/g,'');
+$('#q').addEventListener('input', e => {
+  const q = norm(e.target.value.trim()), box = $('#results');
+  if (q.length < 2) { box.hidden = true; return; }
+  const hits = HEADS.filter(h => norm(h[0]).includes(q));
+  box.hidden = false;
+  box.innerHTML = hits.length ? hits.map(h => `<div class="r"><span><b>${esc(h[0])}</b><br><span style="color:var(--faint);font-size:13px">العدد 6512 · صفحة ${h[1]}</span></span><button class="pg chip" type="button" data-read="${h[1]}" data-snd="flip">افتح</button></div>`).join('')
+    : `<div class="r"><span style="color:var(--faint)">لا نتائج لـ«${esc(e.target.value)}» في الأعداد المؤرشفة حالياً.</span></div>`;
+});
+
+/* ---------- المناسبات: الحالية والمؤرشفة ---------- */
+const OCCASIONS = [
+  { current: true, sample: true, title: 'اليوم العالمي للتسامح', kind: 'عالمية', date: '16 نوفمبر 2026م',
+    body: ['يحتفي العالم في السادس عشر من نوفمبر من كل عام باليوم الدولي للتسامح، وهي مناسبة تذكّرنا بأن التسامح ليس ضعفاً ولا تنازلاً، بل هو وعي بأن الاختلاف سنة من سنن الحياة، وأن احترام الآخر شرط لعيش مشترك كريم.',
+           'وتبدأ ثقافة التسامح من البيت؛ حين يرى الأبناء والديهم يختلفان بهدوء، ويعتذران بلا تكبر، ويقدّمان حسن الظن على سوئه. ومن هناك تمتد إلى المدرسة والحي والمجتمع كله.',
+           'هذا نص نموذجي يوضّح شكل مربع المقال. سيُستبدل بمقالك عن المناسبة الحالية فور إرساله، مع صور الفعالية في المعرض المجاور.'] },
+];
+(function renderOcc(){
+  const cur = OCCASIONS.find(o => o.current), past = OCCASIONS.filter(o => !o.current);
+  $('#occArticle').innerHTML = `<div class="kind"><span class="tag">مناسبة ${cur.kind}</span>${cur.sample ? '<span class="tag sample">نص نموذجي</span>' : ''}</div>
+    <h3>${esc(cur.title)}</h3><div class="date">${esc(cur.date)}</div><div class="body">${cur.body.map(p => `<p>${esc(p)}</p>`).join('')}</div>`;
+  $('#occArchive').innerHTML = past.map(o => `<tr><td>${esc(o.date)}</td><td><b>${esc(o.title)}</b></td><td>${esc(o.kind)}</td><td><button class="chip" type="button">اقرأ</button></td></tr>`).join('');
+  $('#occEmpty').hidden = past.length > 0;
+})();
+
+/* ---------- تبويبات المناشط ---------- */
+const tabs = $$('.tab');
+function selectTab(n){ tabs.forEach((t,i) => { const on = i === n-1; t.setAttribute('aria-selected', String(on)); $('#p'+(i+1)).hidden = !on; }); }
+tabs.forEach((t,i) => t.addEventListener('click', () => selectTab(i+1)));
+$$('[data-tab]').forEach(a => a.addEventListener('click', () => selectTab(+a.dataset.tab)));
+$('#mwChips').addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (!b) return; Snd.play('tick');
+  $$('#mwChips .chip').forEach(c => c.setAttribute('aria-pressed', String(c === b))); ['idaa','nadwa','maqal'].forEach(f => $('#mw-'+f).hidden = f !== b.dataset.f); });
+
+/* ---------- القارئ ---------- */
+const reader = $('#reader'), rng = $('#pageRange'), cv = $('#curl'), cx = cv.getContext('2d'), stage = $('#stage'), MAXP = 33, RATIO = 866/1322;
+let page = 1, W = 0, H = 0, DPR = 1, anim = null, drag = null;
+const imgs = {};
+function pimg(n){ if (n < 1 || n > MAXP) return null; if (!imgs[n]) { const im = new Image(); im.onload = () => { if (!anim && !drag) drawFlat(); }; im.src = `read/p-${n}.jpg`; imgs[n] = im; } return imgs[n]; }
+function fit(){
+  const aw = stage.clientWidth - 16, ah = stage.clientHeight - 8;
+  W = Math.floor(Math.min(aw, ah*RATIO)); H = Math.floor(W/RATIO);
+  DPR = Math.min(devicePixelRatio || 1, 3);
+  cv.style.width = W+'px'; cv.style.height = H+'px'; cv.width = Math.round(W*DPR); cv.height = Math.round(H*DPR);
+  cx.setTransform(DPR,0,0,DPR,0,0); drawFlat();
+}
+function paint(n){ const im = pimg(n); cx.fillStyle = '#fbf8f1'; cx.fillRect(0,0,W,H); if (im && im.complete && im.naturalWidth) cx.drawImage(im, 0, 0, W, H); }
+function drawFlat(){ if (W) paint(page); }
+// قصّ مضلع بنصف مستوى: يبقي النقاط التي dot(X-M,n) >= 0
+function clipHalf(poly, M, n, keepFront){
+  const f = q => ((q[0]-M[0])*n[0] + (q[1]-M[1])*n[1]) * (keepFront ? 1 : -1), out = [];
+  for (let i = 0; i < poly.length; i++){ const A = poly[i], B = poly[(i+1)%poly.length], fa = f(A), fb = f(B);
+    if (fa >= 0) out.push(A);
+    if ((fa >= 0) !== (fb >= 0)) { const t = fa/(fa-fb); out.push([A[0]+(B[0]-A[0])*t, A[1]+(B[1]-A[1])*t]); } }
+  return out;
+}
+const pathOf = pts => { cx.beginPath(); pts.forEach((q,i) => i ? cx.lineTo(q[0],q[1]) : cx.moveTo(q[0],q[1])); cx.closePath(); };
+// رسم الصفحة المنطوية: الركن السفلي الأيسر (0,H) انتقل إلى P. top = الصفحة التي تُقلب، under = ما تحتها
+function drawCurl(top, under, P){
+  const C = [0, H], dx = P[0]-C[0], dy = P[1]-C[1], len = Math.hypot(dx, dy);
+  if (len < 0.5) { paint(top); return; }
+  const n = [dx/len, dy/len], M = [(C[0]+P[0])/2, (C[1]+P[1])/2], rect = [[0,0],[W,0],[W,H],[0,H]];
+  const rest = clipHalf(rect, M, n, true), fold = clipHalf(rect, M, n, false);
+  const refl = q => { const d = 2*((q[0]-M[0])*n[0] + (q[1]-M[1])*n[1]); return [q[0]-d*n[0], q[1]-d*n[1]]; };
+  const flap = fold.map(refl), k = Math.min(1, len/W);
+  // الصفحة التالية تحت
+  paint(under);
+  // ظل على الصفحة السفلى بمحاذاة خط الطي
+  cx.save(); pathOf(fold); cx.clip();
+  let g = cx.createLinearGradient(M[0], M[1], M[0]-n[0]*W*.35, M[1]-n[1]*W*.35);
+  g.addColorStop(0, `rgba(0,0,0,${.45*(1-k*.5)})`); g.addColorStop(1, 'rgba(0,0,0,0)'); cx.fillStyle = g; cx.fillRect(0,0,W,H); cx.restore();
+  // الجزء الباقي من الصفحة المقلوبة
+  if (rest.length > 2) { cx.save(); pathOf(rest); cx.clip(); const im = pimg(top); cx.fillStyle = '#fbf8f1'; cx.fillRect(0,0,W,H); if (im && im.complete && im.naturalWidth) cx.drawImage(im,0,0,W,H);
+    g = cx.createLinearGradient(M[0], M[1], M[0]+n[0]*40, M[1]+n[1]*40); g.addColorStop(0,'rgba(0,0,0,.22)'); g.addColorStop(1,'rgba(0,0,0,0)'); cx.fillStyle = g; cx.fillRect(0,0,W,H); cx.restore(); }
+  // ظهر الورقة المنطوية
+  const flapIn = clipHalf(clipHalf(flap, [0,0],[1,0],true), [W,0],[-1,0],true);
+  if (flapIn.length > 2) {
+    cx.save(); cx.shadowColor = 'rgba(0,0,0,.45)'; cx.shadowBlur = 22; cx.shadowOffsetX = -4; pathOf(flapIn); cx.fillStyle = '#efe7d6'; cx.fill(); cx.restore();
+    cx.save(); pathOf(flapIn); cx.clip();
+    // طيف خفيف من الوجه الآخر للورقة (ما يُرى من خلف الورق)
+    const im = pimg(top); if (im && im.complete && im.naturalWidth) { cx.globalAlpha = .1; cx.save(); cx.translate(M[0], M[1]); const ang = Math.atan2(n[1], n[0]);
+      cx.rotate(ang); cx.scale(-1, 1); cx.rotate(-ang); cx.translate(-M[0], -M[1]); cx.drawImage(im,0,0,W,H); cx.restore(); cx.globalAlpha = 1; }
+    g = cx.createLinearGradient(M[0], M[1], M[0]-n[0]*W*.5, M[1]-n[1]*W*.5);
+    g.addColorStop(0,'rgba(120,95,60,.35)'); g.addColorStop(.18,'rgba(255,255,255,.35)'); g.addColorStop(.55,'rgba(0,0,0,.05)'); g.addColorStop(1,'rgba(0,0,0,.18)');
+    cx.fillStyle = g; cx.fillRect(0,0,W,H); cx.restore();
+  }
+}
+const ease = t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+// مسار الركن: من الركن الأيسر السفلي إلى ما وراء الكعب الأيمن مع ارتفاع خفيف يعطي الانحناء
+const along = e => [e*2*W, H - Math.sin(Math.PI*e)*H*.22];
+function animate(top, under, e0, e1, done){
+  if (RM) { done(); return; }
+  const t0 = performance.now(), dur = 700*Math.abs(e1-e0) + 120;
+  anim = true;
+  const step = t => { const k = Math.min((t-t0)/dur, 1), e = e0 + (e1-e0)*ease(k); drawCurl(top, under, along(e));
+    if (k < 1) requestAnimationFrame(step); else { anim = null; done(); } };
+  requestAnimationFrame(step);
+}
+function setPage(n){ page = n; rng.value = page; $('#pageNo').textContent = `${page} / ${MAXP}`; drawFlat(); pimg(page+1); pimg(page-1); }
+function go(n){
+  n = Math.max(1, Math.min(MAXP, n)); if (n === page || anim) return;
+  pimg(n); Snd.play('flip');
+  if (n > page) animate(page, n, 0, 1, () => setPage(n));
+  else animate(n, page, 1, 0, () => setPage(n));
+}
+function openReader(n){ reader.hidden = false; document.body.style.overflow = 'hidden'; page = Math.max(1, Math.min(MAXP, n)); pimg(page);
+  requestAnimationFrame(() => { fit(); setPage(page); }); setTimeout(() => $('#hint').style.opacity = 0, 3500); }
+addEventListener('resize', () => { if (!reader.hidden) fit(); });
+// السحب باليد من الركن: من النصف الأيسر يقلب للأمام، ومن النصف الأيمن يعيد الصفحة السابقة
+cv.addEventListener('pointerdown', e => { if (anim) return; const r = cv.getBoundingClientRect(), x = e.clientX - r.left;
+  const fwd = x < W/2; if (fwd && page >= MAXP) return; if (!fwd && page <= 1) return;
+  drag = { fwd, top: fwd ? page : page-1, under: fwd ? page+1 : page, sx: e.clientX, sxr: x, moved: false }; pimg(drag.top); pimg(drag.under); cv.setPointerCapture(e.pointerId); });
+cv.addEventListener('pointermove', e => { if (!drag) return; const r = cv.getBoundingClientRect();
+  if (Math.abs(e.clientX - drag.sx) > 4) drag.moved = true;
+  let x = e.clientX - r.left, y = e.clientY - r.top;
+  if (!drag.fwd) x = 2*W - Math.max(0, drag.sxr - x)*2;
+  x = Math.max(1, Math.min(2*W, x)); y = Math.max(H*.55, Math.min(H, y));
+  drag.e = Math.min(1, Math.max(0, x/(2*W))); drawCurl(drag.top, drag.under, [x, y]); });
+function endDrag(){ if (!drag) return; const d = drag; drag = null;
+  if (!d.moved) { go(page + (d.fwd ? 1 : -1)); return; }
+  const e = d.e ?? (d.fwd ? 0 : 1), finish = d.fwd ? e > .25 : e < .75;
+  Snd.play('flip');
+  if (finish) animate(d.top, d.under, e, d.fwd ? 1 : 0, () => setPage(d.fwd ? d.under : d.top));
+  else animate(d.top, d.under, e, d.fwd ? 0 : 1, () => setPage(page)); }
+cv.addEventListener('pointerup', endDrag); cv.addEventListener('pointercancel', endDrag);
+document.addEventListener('click', e => { const b = e.target.closest('[data-read]'); if (b) openReader(+b.dataset.read); });
+book.addEventListener('click', () => { Snd.play('chime'); openReader(1); });
+book.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openReader(1); } });
+$('#next').addEventListener('click', () => go(page+1));
+$('#prev').addEventListener('click', () => go(page-1));
+rng.addEventListener('change', () => go(+rng.value));
+
+/* ---------- لايت بوكس ---------- */
+const lb = $('#lightbox'), poster = $('#poster');
+const openLB = () => { lb.hidden = false; document.body.style.overflow = 'hidden'; Snd.play('chime'); };
+poster.addEventListener('click', openLB);
+poster.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(); } });
+function closeModals(){ reader.hidden = true; lb.hidden = true; document.body.style.overflow = ''; }
+$$('[data-close]').forEach(b => b.addEventListener('click', closeModals));
+[reader, lb].forEach(m => m.addEventListener('click', e => { if (e.target === m || e.target.classList.contains('stage')) closeModals(); }));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModals();
+  if (!reader.hidden) { if (e.key === 'ArrowLeft') go(page+1); if (e.key === 'ArrowRight') go(page-1); }
+});
+
+/* ---------- نسخ البريد ---------- */
+$('#copyMail').addEventListener('click', e => { const b = e.currentTarget, t = $('#mail').textContent;
+  const done = () => { b.textContent = 'نُسخ'; Snd.play('tick'); setTimeout(() => b.textContent = 'نسخ', 1600); };
+  (navigator.clipboard?.writeText(t) ?? Promise.reject()).then(done).catch(() => { const r = document.createRange(); r.selectNodeContents($('#mail')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }); });
+</script>
+
+</body>
+</html>
